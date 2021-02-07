@@ -9,7 +9,7 @@
   <title>{title} - {name} v{version}-alpha</title>
 </svelte:head>
 
-<header class="flex p-2">
+<header class="flex p-2 bg-black bg-opacity-25">
   <div class="flex-auto">
     <slot />
   </div>
