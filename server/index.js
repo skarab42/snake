@@ -22,7 +22,9 @@ const io = socketIO(server, {
   },
 });
 
-io.on("connection", (socket) => {
+const snake = io.of("/snake");
+
+snake.on("connection", (socket) => {
   console.log("a user connected");
 
   socket.on("disconnect", () => {

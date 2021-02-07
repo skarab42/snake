@@ -6,7 +6,7 @@
 
   let title = "Snake";
 
-  const socket = io();
+  const socket = io("/snake");
 
   socket.on("connect", () => {
     console.log("connected");
