@@ -6,7 +6,7 @@
 
 <Overlay>
   <div class="m-auto">
-    <div class="p-2 flex gap-2 bg-gray-700 rounded">
+    <div class="p-2 flex gap-2 text-gray-300 bg-gray-800 rounded shadow-lg">
       <div class="animate-spin">
         <Icon icon="{FaSpinner}" />
       </div>
