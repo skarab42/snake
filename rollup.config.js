@@ -35,7 +35,7 @@ export default {
     resolve({ browser: true, dedupe: ["svelte"] }),
     commonjs(),
     svelte({ compilerOptions: { dev: watch } }),
-    cleaner({ targets: [outputScripts] }),
+    !watch && cleaner({ targets: [outputScripts] }),
     watch && livereload(outputPath),
     watch && serve(serverPath),
     !watch && terser(),
