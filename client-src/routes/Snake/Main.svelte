@@ -2,9 +2,25 @@
   import Inputs from "./Inputs.svelte";
   import socket from "./libs/socket";
 
+  let percent = 0;
+
   function onKeyDown({ detail }) {
     socket.emit("keydown", detail);
   }
+
+  socket.on("tick", (data) => {
+    percent = data.percent;
+  });
+
+  socket.on("action", (data) => {
+    console.log(data);
+  });
 </script>
 
-<Inputs on:keydown="{onKeyDown}" />
+<div class="bg-gray-600">
+  <div class="h-6 bg-green-600" style="width:{percent}%"></div>
+</div>
+
+<div class="p-2">
+  <Inputs on:keydown="{onKeyDown}" />
+</div>
