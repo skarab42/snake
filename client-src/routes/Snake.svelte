@@ -1,7 +1,10 @@
 <script>
+  import BackLink from "@/components/App/BackLink.svelte";
   import Layout from "@/components/App/Layout.svelte";
-  import Link from "@/router/Link.svelte";
+  import Title from "@/components/App/Title.svelte";
   import io from "socket.io-client";
+
+  let title = "Snake";
 
   const socket = io();
 
@@ -14,9 +17,10 @@
   });
 </script>
 
-<Layout title="Snake">
-  <div slot="header">
-    <Link path="/">Back to home</Link>
+<Layout title="{title}">
+  <div slot="header" class="flex items-center gap-2">
+    <BackLink />
+    <Title>{title}</Title>
   </div>
   <div class="flex p-2 gap-2">...</div>
 </Layout>
