@@ -3,13 +3,11 @@
   import BackLink from "@/components/App/BackLink.svelte";
   import Layout from "@/components/App/Layout.svelte";
   import Title from "@/components/App/Title.svelte";
+  import socket from "./Snake/libs/socket";
   import Main from "./Snake/Main.svelte";
-  import io from "socket.io-client";
 
   let title = "Snake";
   let component = Connecting;
-
-  const socket = io("/snake");
 
   socket.on("connect", () => (component = Main));
   socket.on("disconnect", () => (component = Connecting));
