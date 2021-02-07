@@ -5,13 +5,15 @@ import chokidar from "chokidar";
 export default function spawnServer(bin) {
   let server = null;
 
+  const arvg = process.argv.slice(2);
+
   const kill = () => {
     server.stdin.pause();
     server.kill();
   };
 
   const start = () => {
-    server = spawn("node", [bin]);
+    server = spawn("node", [bin, ...arvg]);
 
     server.stdout.on("data", (data) => {
       console.log(`[server] ${data.toString().trim()}`);

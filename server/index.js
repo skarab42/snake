@@ -1,4 +1,5 @@
 const { dev, host, port, name, version, clientPath } = require("./config");
+const logger = require("./logger");
 const polka = require("polka");
 const sirv = require("sirv");
 
@@ -8,8 +9,6 @@ polka()
   .use(client)
   .listen(port, (err) => {
     if (err) throw err;
-    /* eslint-disable no-console */
-    console.log(`> ${name} v${version}`);
-    console.log(`> running on http://${host}:${port}`);
-    /* eslint-enable no-console */
+    logger.info(`${name} v${version}`);
+    logger.info(`running on http://${host}:${port}`);
   });
