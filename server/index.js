@@ -4,7 +4,7 @@ const logger = require("./logger");
 const polka = require("polka");
 const sirv = require("sirv");
 
-const client = sirv(clientPath, { dev });
+const client = sirv(clientPath, { dev, single: true });
 const address = `http://${host}:${port}`;
 
 const { server } = polka()
