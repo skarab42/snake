@@ -4,11 +4,17 @@ const { dev } = require("./config");
 
 const fileFormat = combine(
   timestamp({ format: "YY-MM-DD HH:MM:SS" }),
-  printf((info) => `[${info.timestamp}] [${info.level}] ${info.message}`)
+  printf(({ timestamp, level, message, ...rest }) => {
+    const data = Object.keys(rest).length ? JSON.stringify(rest) : "";
+    return `[${timestamp}] [${level}] ${message} ${data}`;
+  })
 );
 
 const consoleFormat = combine(
-  printf((info) => `[${info.level}] ${info.message}`)
+  printf(({ level, message, ...rest }) => {
+    const data = Object.keys(rest).length ? JSON.stringify(rest) : "";
+    return `[${level}] ${message} ${data}`;
+  })
 );
 
 const logger = createLogger({

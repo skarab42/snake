@@ -1,33 +1,22 @@
-const { dev, host, port, name, version, clientPath } = require("./config");
-const socketIO = require("socket.io");
+const { dev, address, port, name, version, clientPath } = require("./config");
+const snake = require("./plugins/snake");
 const logger = require("./logger");
+const io = require("./socket/io");
 const polka = require("polka");
 const sirv = require("sirv");
 
 const client = sirv(clientPath, { dev, single: true });
-const address = `http://${host}:${port}`;
+
+function banner() {
+  logger.info(`${name} v${version}`);
+  logger.info(`running on ${address}`);
+}
 
 const { server } = polka()
   .use(client)
   .listen(port, (err) => {
     if (err) throw err;
-    logger.info(`${name} v${version}`);
-    logger.info(`running on ${address}`);
+    banner();
+    io(server);
+    snake.init();
   });
-
-const io = socketIO(server, {
-  cors: {
-    origin: address,
-    methods: ["GET", "POST"],
-  },
-});
-
-const snake = io.of("/snake");
-
-snake.on("connection", (socket) => {
-  console.log("a user connected");
-
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-  });
-});
