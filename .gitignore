@@ -1,5 +1,6 @@
 client/scripts/
 client/styles/
 node_modules/
+*.log
 *_.*
 *_
