@@ -1,20 +1,18 @@
 <script>
+  import Connecting from "@/components/App/Connecting.svelte";
   import BackLink from "@/components/App/BackLink.svelte";
   import Layout from "@/components/App/Layout.svelte";
   import Title from "@/components/App/Title.svelte";
+  import Main from "./Snake/Main.svelte";
   import io from "socket.io-client";
 
   let title = "Snake";
+  let component = Connecting;
 
   const socket = io("/snake");
 
-  socket.on("connect", () => {
-    console.log("connected");
-  });
-
-  socket.on("disconnect", () => {
-    console.log("disconnected");
-  });
+  socket.on("connect", () => (component = Main));
+  socket.on("disconnect", () => (component = Connecting));
 </script>
 
 <Layout title="{title}">
@@ -22,5 +20,5 @@
     <BackLink />
     <Title>{title}</Title>
   </div>
-  <div class="flex p-2 gap-2">...</div>
+  <svelte:component this="{component}" />
 </Layout>
