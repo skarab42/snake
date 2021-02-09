@@ -9,6 +9,9 @@
   import { socket } from "./Snake/store";
   import io from "socket.io-client";
 
+  let title = "Snake";
+  let component = Connecting;
+
   setContext("snake", {
     socket,
   });
@@ -23,9 +26,6 @@
     $socket.disconnect();
     $socket = null;
   });
-
-  let title = "Snake";
-  let component = Connecting;
 </script>
 
 <Layout title="{title}">

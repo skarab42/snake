@@ -36,5 +36,5 @@
 </script>
 
 {#if match($currentPath)}
-  <svelte:component this={component} {...props} />
+  <svelte:component this="{component}" {...props} />
 {/if}

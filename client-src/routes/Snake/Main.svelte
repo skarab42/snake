@@ -5,8 +5,9 @@
   import { getContext } from "svelte";
 
   const { socket } = getContext("snake");
+  const isOverlay = location.search.slice(1) === "overlay";
 
-  let topOffset = 72;
+  let topOffset = isOverlay ? 0 : 72;
   let inputs = { top: 0, left: 0 };
 
   function onKeyDown({ detail }) {
