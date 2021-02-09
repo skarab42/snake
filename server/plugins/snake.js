@@ -4,6 +4,7 @@ const io = require("../socket/io");
 let ticks = 0;
 let division = 10;
 let interval = 1000;
+let deleyBetweenGame = 5000;
 
 let snake = [];
 let food = null;
@@ -121,15 +122,15 @@ function savePosition() {
 }
 
 function gameOver() {
+  logger.info(`snake: game over`);
   isGameOver = true;
   stopGame();
-  setTimeout(startGame, 5000);
+  setTimeout(startGame, deleyBetweenGame);
 }
 
 function runAction() {
   action = getAction();
   logger.info(`snake: run action: ${action}`);
-
   savePosition();
   move[action]();
   snakeEat();
@@ -140,7 +141,18 @@ function runAction() {
   actions = {};
 }
 
+const oppositDirections = {
+  up: "down",
+  down: "up",
+  left: "right",
+  right: "left",
+};
+
 function addAction(input) {
+  if (action === oppositDirections[input]) {
+    logger.info("snake: skip input", { input });
+    return;
+  }
   if (!actions[input]) {
     actions[input] = 1;
   } else {
