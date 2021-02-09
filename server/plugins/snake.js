@@ -4,6 +4,8 @@ const io = require("../socket/io");
 let ticks = 0;
 let division = 10;
 let interval = 1000;
+let lastInputTime = 0;
+let hideTimeout = 15000;
 let deleyBetweenGame = 5000;
 
 let snake = [];
@@ -175,6 +177,7 @@ function startGame() {
     const lastTick = max === tick;
     const percent = Math.round((tick / max) * 100);
     snakeIO.emit("tick", { tick, percent, lastTick, actions });
+    snakeIO.emit("show-overlay", Date.now() - lastInputTime < hideTimeout);
     lastTick && runAction();
     ticks++;
   }, interval / division);
@@ -199,19 +202,19 @@ function init() {
   snakeIO.on("connection", (socket) => {
     clientsCount++;
     logger.info(`snake: user connected`, { clientsCount });
-    snakeIO.emit("clientsCount", clientsCount);
+    snakeIO.emit("show-overlay", clientsCount > 1);
 
     !tickIntervalId && startGame();
 
     socket.on("disconnect", () => {
       clientsCount--;
       logger.info("snake: user disconnected", { clientsCount });
-      snakeIO.emit("clientsCount", clientsCount);
       if (clientsCount === 0) stopGame();
     });
 
     socket.on("keydown", (input) => {
       logger.info("snake: keydown", { input });
+      lastInputTime = Date.now();
       addAction(input);
     });
 

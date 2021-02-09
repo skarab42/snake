@@ -18,8 +18,8 @@
     $socket.on("connect", () => (connected = true));
     $socket.on("disconnect", () => (connected = false));
 
-    $socket.on("clientsCount", (clientsCount) => {
-      visible = clientsCount > 1;
+    $socket.on("show-overlay", (show) => {
+      visible = show;
     });
   });
 
