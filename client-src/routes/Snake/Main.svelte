@@ -1,18 +1,20 @@
 <script>
+  import { getContext } from "svelte";
   import Inputs from "./Inputs.svelte";
-  import socket from "./libs/socket";
+
+  const { socket } = getContext("snake");
 
   let percent = 0;
 
   function onKeyDown({ detail }) {
-    socket.emit("keydown", detail);
+    $socket.emit("keydown", detail);
   }
 
-  socket.on("tick", (data) => {
+  $socket.on("tick", (data) => {
     percent = data.percent;
   });
 
-  socket.on("action", (data) => {
+  $socket.on("action", (data) => {
     console.log(data);
   });
 </script>

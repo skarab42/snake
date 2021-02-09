@@ -3,14 +3,29 @@
   import BackLink from "@/components/App/BackLink.svelte";
   import Layout from "@/components/App/Layout.svelte";
   import Title from "@/components/App/Title.svelte";
-  import socket from "./Snake/libs/socket";
   import Main from "./Snake/Main.svelte";
+  import io from "socket.io-client";
+
+  import { onDestroy, onMount, setContext } from "svelte";
+  import { socket } from "./Snake/store";
+
+  setContext("snake", {
+    socket,
+  });
+
+  onMount(() => {
+    $socket = io("/snake");
+    $socket.on("connect", () => (component = Main));
+    $socket.on("disconnect", () => (component = Connecting));
+  });
+
+  onDestroy(() => {
+    $socket.disconnect();
+    $socket = null;
+  });
 
   let title = "Snake";
   let component = Connecting;
-
-  socket.on("connect", () => (component = Main));
-  socket.on("disconnect", () => (component = Connecting));
 </script>
 
 <Layout title="{title}">
