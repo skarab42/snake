@@ -12,6 +12,9 @@
   let topOffset = 72;
   let settings = null;
   let blockSize = null;
+  let isGameOver = null;
+
+  let inputs = { top: 0, left: 0 };
 
   let redColor = "#e80d40";
   let backgroundColor = "#111111";
@@ -32,6 +35,9 @@
 
     canvas.style.top = `${topOffset + top}px`;
     canvas.style.left = `${left}px`;
+
+    inputs.top = top + topOffset;
+    inputs.left = left;
 
     canvas.setAttribute("width", settings.width);
     canvas.setAttribute("height", settings.height);
@@ -68,7 +74,25 @@
     context.strokeRect(food.x, food.y, blockSize, blockSize);
   }
 
+  function drawGameOver() {
+    context.lineWidth = 4;
+    context.strokeStyle = redColor;
+    context.strokeRect(0, 0, settings.width, settings.height);
+    context.font = "142px Roboto";
+    context.textAlign = "center";
+    context.fillStyle = redColor;
+    context.fillText(
+      "Game Over!",
+      settings.width / 2,
+      settings.height / 2,
+      settings.width - 100
+    );
+  }
+
   function draw() {
+    if (isGameOver) {
+      return drawGameOver();
+    }
     clearScreen();
     drawBackground();
     drawSnake();
@@ -91,6 +115,7 @@
   async function init() {
     settings = await emitPromise("getSettings");
     context = canvas.getContext("2d");
+    isGameOver = settings.isGameOver;
     blockSize = settings.blockSize;
     snake = settings.snake;
     food = settings.food;
@@ -100,17 +125,16 @@
   onMount(async () => {
     await init();
     window.addEventListener("resize", onResize);
+    $socket.on("action", (data) => {
+      isGameOver = data.isGameOver;
+      snake = data.snake;
+      food = data.food;
+      draw();
+    });
   });
 
   onDestroy(() => {
     window.removeEventListener("resize", onResize);
-  });
-
-  $socket.on("action", (data) => {
-    console.log("action:", data);
-    snake = data.snake;
-    food = data.food;
-    draw();
   });
 </script>
 
@@ -118,6 +142,9 @@
 
 <canvas bind:this="{canvas}" class="absolute"></canvas>
 
-<div class="absolute m-5 p-2 bg-gray-800 bg-opacity-25 rounded-lg">
+<div
+  class="absolute m-5 p-2 bg-gray-800 bg-opacity-25 rounded-lg"
+  style="top:{inputs.top}px;left:{inputs.left}px"
+>
   <Inputs on:keydown="{onKeyDown}" />
 </div>
