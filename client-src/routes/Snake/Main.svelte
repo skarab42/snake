@@ -11,7 +11,7 @@
   let inputs = { top: 0, left: 0 };
 
   function onKeyDown({ detail }) {
-    $socket.emit("keydown", detail);
+    $socket && $socket.emit("keydown", detail);
   }
 
   function onResize({ detail }) {
@@ -22,7 +22,7 @@
 
 <ProgressBar />
 
-<Canvas topOffset="{topOffset}" on:resize="{onResize}" />
+<Canvas fontFamily="SnakeChan" topOffset="{topOffset}" on:resize="{onResize}" />
 
 <div
   class="absolute m-5 p-2 bg-gray-800 bg-opacity-25 rounded-lg"

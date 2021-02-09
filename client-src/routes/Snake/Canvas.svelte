@@ -10,6 +10,8 @@
   const dispatch = createEventDispatcher();
 
   export let topOffset = 0;
+  export let fontSize = 142;
+  export let fontFamily = "Roboto";
   export let foodColor = "#e80d40";
   export let gameOverColor = "#e80d40";
   export let backgroundColor = "#111111";
@@ -76,7 +78,7 @@
     context.lineWidth = 4;
     context.strokeStyle = gameOverColor;
     context.strokeRect(0, 0, settings.width, settings.height);
-    context.font = "142px Roboto";
+    context.font = `${fontSize}px ${fontFamily}`;
     context.textAlign = "center";
     context.fillStyle = gameOverColor;
     context.fillText(

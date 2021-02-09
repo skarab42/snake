@@ -199,12 +199,14 @@ function init() {
   snakeIO.on("connection", (socket) => {
     clientsCount++;
     logger.info(`snake: user connected`, { clientsCount });
+    snakeIO.emit("clientsCount", clientsCount);
 
     !tickIntervalId && startGame();
 
     socket.on("disconnect", () => {
       clientsCount--;
       logger.info("snake: user disconnected", { clientsCount });
+      snakeIO.emit("clientsCount", clientsCount);
       if (clientsCount === 0) stopGame();
     });
 
