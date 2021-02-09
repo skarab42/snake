@@ -45,19 +45,37 @@
   function active(name, state) {
     return state[name] ? "text-pink-600" : "";
   }
+
+  let btnClass = "hover:bg-blue-600 cursor-pointer rounded-full";
 </script>
 
 <div class="w-20 grid grid-cols-3 gap-2">
   <div class="{active('up', state)} col-start-2 col-end-4">
-    <Icon icon="{MdKeyboardArrowUp}" />
+    <Icon
+      class="{btnClass}"
+      icon="{MdKeyboardArrowUp}"
+      on:click="{dispatch.bind(null, 'keydown', 'up')}"
+    />
   </div>
   <div class="{active('left', state)}">
-    <Icon icon="{MdKeyboardArrowLeft}" />
+    <Icon
+      class="{btnClass}"
+      icon="{MdKeyboardArrowLeft}"
+      on:click="{dispatch.bind(null, 'keydown', 'left')}"
+    />
   </div>
   <div class="{active('right', state)} col-start-3">
-    <Icon icon="{MdKeyboardArrowRight}" />
+    <Icon
+      class="{btnClass}"
+      icon="{MdKeyboardArrowRight}"
+      on:click="{dispatch.bind(null, 'keydown', 'right')}"
+    />
   </div>
   <div class="{active('down', state)} col-start-2 col-end-4">
-    <Icon icon="{MdKeyboardArrowDown}" />
+    <Icon
+      class="{btnClass}"
+      icon="{MdKeyboardArrowDown}"
+      on:click="{dispatch.bind(null, 'keydown', 'down')}"
+    />
   </div>
 </div>

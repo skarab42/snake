@@ -11,9 +11,15 @@
     xl: "w-12 h-12",
   };
 
+  let cls = "";
+  export { cls as class };
+
   let sizeClass = sizes[size] || sizes.sm;
 </script>
 
-<span class="flex fill-current items-center inline-block {sizeClass}">
+<span
+  on:click
+  class="flex fill-current items-center inline-block {sizeClass} {cls}"
+>
   <svelte:component this="{icon}" />
 </span>
