@@ -4,10 +4,10 @@
   import Layout from "@/components/App/Layout.svelte";
   import Title from "@/components/App/Title.svelte";
   import Main from "./Snake/Main.svelte";
-  import io from "socket.io-client";
 
   import { onDestroy, onMount, setContext } from "svelte";
   import { socket } from "./Snake/store";
+  import io from "socket.io-client";
 
   setContext("snake", {
     socket,

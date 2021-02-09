@@ -46,7 +46,7 @@ function startGame() {
     const tick = ticks % division;
     const lastTick = max === tick;
     const percent = Math.round((tick / max) * 100);
-    snake.emit("tick", { tick, percent, lastTick });
+    snake.emit("tick", { tick, percent, lastTick, actions });
     lastTick && runAction();
     ticks++;
   }, interval / division);
