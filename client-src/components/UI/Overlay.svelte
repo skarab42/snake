@@ -1,7 +1,8 @@
 <script>
   import Portal from "svelte-portal";
 
-  let top = 0;
+  export let top = 0;
+
   let content = "flex overflow-auto";
   let colors = "dark:text-gray-200 bg-black bg-opacity-50";
   let position = "absolute left-0 right-0 bottom-0 z-50";

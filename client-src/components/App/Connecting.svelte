@@ -4,7 +4,7 @@
   import FaSpinner from "svelte-icons/fa/FaSpinner.svelte";
 </script>
 
-<Overlay>
+<Overlay top="48">
   <div class="m-auto">
     <div class="p-2 flex gap-2 text-gray-300 bg-gray-800 rounded shadow-lg">
       <div class="animate-spin">
