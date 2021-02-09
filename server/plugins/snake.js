@@ -5,10 +5,17 @@ let ticks = 0;
 let division = 10;
 let interval = 5000;
 
-let snake = null;
+let snake = [];
+let food = null;
+
 let action = "up";
 let actions = {};
 
+let width = 1920;
+let height = 1080;
+let blockSize = 40;
+
+let snakeIO = null;
 let clientsCount = 0;
 let tickIntervalId = null;
 
@@ -23,7 +30,7 @@ function getAction() {
 function runAction() {
   action = getAction();
   logger.info(`snake: run action: ${action}`);
-  snake.emit("action", { action });
+  snakeIO.emit("action", { action, snake, food });
   actions = {};
 }
 
@@ -46,7 +53,7 @@ function startGame() {
     const tick = ticks % division;
     const lastTick = max === tick;
     const percent = Math.round((tick / max) * 100);
-    snake.emit("tick", { tick, percent, lastTick, actions });
+    snakeIO.emit("tick", { tick, percent, lastTick, actions });
     lastTick && runAction();
     ticks++;
   }, interval / division);
@@ -66,9 +73,9 @@ function stopGame() {
 
 function init() {
   logger.info(`snake: init`);
-  snake = io().of("/snake");
+  snakeIO = io().of("/snake");
 
-  snake.on("connection", (socket) => {
+  snakeIO.on("connection", (socket) => {
     clientsCount++;
     logger.info(`snake: user connected`, { clientsCount });
 
@@ -83,6 +90,16 @@ function init() {
     socket.on("keydown", (input) => {
       logger.info("snake: keydown", { input });
       addAction(input);
+    });
+
+    socket.on("getSettings", (cb) => {
+      cb({
+        food,
+        snake,
+        width,
+        height,
+        blockSize,
+      });
     });
   });
 

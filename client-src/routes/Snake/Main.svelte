@@ -1,52 +1,123 @@
 <script>
-  import { getContext } from "svelte";
+  import { getContext, onDestroy, onMount } from "svelte";
+  import ProgressBar from "./ProgressBar.svelte";
   import Inputs from "./Inputs.svelte";
 
   const { socket } = getContext("snake");
 
-  let percent = 0;
-  let stats = [];
+  let snake = [];
+  let food = null;
+  let canvas = null;
+  let context = null;
+  let topOffset = 72;
+  let settings = null;
+  let blockSize = null;
+
+  let redColor = "#e80d40";
+  let backgroundColor = "#111111";
 
   function onKeyDown({ detail }) {
     $socket.emit("keydown", detail);
   }
 
-  function getTotal(actions) {
-    return Object.values(actions).reduce((acc, val) => acc + val, 0);
+  function setSize() {
+    const maxWidth = window.innerWidth;
+    const maxHeight = window.innerHeight - topOffset;
+    const wRatio = maxWidth / settings.width;
+    const hRatio = maxHeight / settings.height;
+    const scale = Math.min(wRatio, hRatio);
+
+    const top = (maxHeight - settings.height * scale) / 2;
+    const left = (maxWidth - settings.width * scale) / 2;
+
+    canvas.style.top = `${topOffset + top}px`;
+    canvas.style.left = `${left}px`;
+
+    canvas.setAttribute("width", settings.width);
+    canvas.setAttribute("height", settings.height);
+    canvas.style.transformOrigin = `0 0`;
+    canvas.style.transform = `scale(${scale})`;
   }
 
-  function getPercent(value, total) {
-    return Math.round((value / total) * 100);
+  function clearScreen() {
+    context.clearRect(0, 0, settings.width, settings.height);
   }
 
-  $socket.on("tick", (data) => {
-    percent = data.percent;
-    stats = Object.entries(data.actions).map(([key, value]) => {
-      return {
-        key,
-        value,
-        percent: getPercent(value, getTotal(data.actions)),
-      };
+  function drawBackground() {
+    context.fillStyle = backgroundColor;
+    context.fillRect(0, 0, settings.width, settings.height);
+  }
+
+  function drawSnake() {
+    const div = Math.round(150 / snake.length);
+    snake.forEach(({ x, y }, i) => {
+      context.lineWidth = 1;
+      context.strokeStyle = `rgba(0,0,0,0.2)`;
+      context.fillStyle = `rgb(20,${250 - div * (i + 1)},20)`;
+      context.fillRect(x, y, blockSize, blockSize);
+      context.strokeRect(x, y, blockSize, blockSize);
     });
+  }
+
+  function drawFood() {
+    if (!food) return;
+    context.lineWidth = 1;
+    context.fillStyle = redColor;
+    context.strokeStyle = `rgba(0,0,0,0.2)`;
+    context.fillRect(food.x, food.y, blockSize, blockSize);
+    context.strokeRect(food.x, food.y, blockSize, blockSize);
+  }
+
+  function draw() {
+    clearScreen();
+    drawBackground();
+    drawSnake();
+    drawFood();
+  }
+
+  function emitPromise(...args) {
+    return new Promise((resolve) => {
+      $socket.emit(...args, (data) => {
+        resolve(data);
+      });
+    });
+  }
+
+  function onResize() {
+    setSize();
+    draw();
+  }
+
+  async function init() {
+    settings = await emitPromise("getSettings");
+    context = canvas.getContext("2d");
+    blockSize = settings.blockSize;
+    snake = settings.snake;
+    food = settings.food;
+    onResize();
+  }
+
+  onMount(async () => {
+    await init();
+    window.addEventListener("resize", onResize);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener("resize", onResize);
   });
 
   $socket.on("action", (data) => {
     console.log("action:", data);
+    snake = data.snake;
+    food = data.food;
+    draw();
   });
 </script>
 
-<div class="relative bg-gray-600">
-  <div class="h-6 bg-green-600" style="width:{percent}%"></div>
-  <div class="absolute inset-0 flex gap-2 items-center justify-center">
-    {#each stats as state}
-      <div class="px-2 bg-pink-600 text-md rounded-lg">
-        {state.key}
-        {state.percent}%
-      </div>
-    {/each}
-  </div>
-</div>
+<ProgressBar />
 
-<div class="p-2">
+<canvas bind:this="{canvas}" class="absolute"></canvas>
+
+<div class="absolute m-5 p-2 bg-gray-800 bg-opacity-25 rounded-lg">
   <Inputs on:keydown="{onKeyDown}" />
 </div>
