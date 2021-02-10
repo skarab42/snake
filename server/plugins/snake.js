@@ -224,6 +224,7 @@ function init() {
         snake,
         width,
         height,
+        action,
         blockSize,
         isGameOver,
       });

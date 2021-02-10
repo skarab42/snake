@@ -54,8 +54,24 @@
     context.fillRect(0, 0, settings.width, settings.height);
   }
 
+  function shadow() {
+    context.shadowColor = "black";
+    context.shadowBlur = 4;
+    context.shadowOffsetX = 4;
+    context.shadowOffsetY = 4;
+  }
+
   function drawSnake() {
     const div = Math.round(150 / snake.length);
+
+    context.save();
+    shadow();
+    snake.forEach(({ x, y }, i) => {
+      context.fillStyle = `black`;
+      context.fillRect(x, y, blockSize, blockSize);
+    });
+    context.restore();
+
     snake.forEach(({ x, y }, i) => {
       context.lineWidth = 1;
       context.strokeStyle = `rgba(0,0,0,0.2)`;
@@ -67,11 +83,21 @@
 
   function drawFood() {
     if (!food) return;
-    context.lineWidth = 1;
     context.fillStyle = foodColor;
-    context.strokeStyle = `rgba(0,0,0,0.2)`;
-    context.fillRect(food.x, food.y, blockSize, blockSize);
-    context.strokeRect(food.x, food.y, blockSize, blockSize);
+    const halSize = blockSize / 2;
+    context.save();
+    shadow();
+    context.beginPath();
+    context.arc(
+      food.x + halSize,
+      food.y + halSize,
+      halSize,
+      0,
+      Math.PI * 2,
+      true
+    );
+    context.fill();
+    context.restore();
   }
 
   function drawGameOver() {
