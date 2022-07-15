@@ -1664,10 +1664,10 @@ svelte-portal@^2.1.1:
   resolved "https://registry.yarnpkg.com/svelte-portal/-/svelte-portal-2.1.1.tgz#7285d19cffffc25bd1d28f98fb5d8173643c326d"
   integrity sha512-B61Bem/3cqgPGVMRM09RhEmZKBGbv3EFVO15GWbFWltNy9dN6sdLK5rV5VEOdZRDNaqgYai9caCHMDuYMpW/1w==
 
-svelte@^3.31.2:
-  version "3.31.2"
-  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.31.2.tgz#d2ddf6cacbb95e4cc3796207510b660a25586324"
-  integrity sha512-TxZGrXzX2ggFH3BIKY5fmbeMdJuZrMIMDYPMX6R9255bueuYIuVaBQSLUeY2oD7W4IdeqRZiAVGCjDw2POKBRA==
+svelte@^3.49.0:
+  version "3.49.0"
+  resolved "https://registry.yarnpkg.com/svelte/-/svelte-3.49.0.tgz#5baee3c672306de1070c3b7888fc2204e36a4029"
+  integrity sha512-+lmjic1pApJWDfPCpUUTc1m8azDqYCG1JN9YEngrx/hUyIcFJo6VZhj0A1Ai0wqoHcEIuQy+e9tk+4uDgdtsFA==
 
 tailwindcss@^2.0.2:
   version "2.0.2"
